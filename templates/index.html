@@ -13,22 +13,21 @@ body, h1, label, textarea, input {
 }
 
 body {
-    font-family: 'Arial', sans-serif; /* Clean font */
-    background: linear-gradient(135deg, #f3f4f6 25%, #e0e7ff 100%); /* Gradient background */
-    color: #333; /* Dark text color */
-    line-height: 1.6; /* Improve line height */
-    padding: 20px; /* Padding around body */
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f3f4f6 25%, #e0e7ff 100%);
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
 }
 
 h1 {
-    text-align: center; /* Center title */
-    margin-bottom: 20px; /* Space below title */
-    color: #2c3e50; /* Dark blue color */
-    font-size: 2.5rem; /* Increased font size */
-    animation: fadeIn 1s; /* Fade-in animation for the title */
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 2.5rem;
+    animation: fadeIn 1s;
 }
 
-/* Keyframes for fade-in animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -39,83 +38,105 @@ h1 {
 }
 
 form {
-    max-width: 600px; /* Limit form width */
-    margin: 0 auto; /* Center form */
-    background: white; /* White background */
-    padding: 20px; /* Padding inside form */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Deeper shadow */
-    transition: transform 0.3s; /* Animation on hover */
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
 }
 
 form:hover {
-    transform: scale(1.02); /* Slight scale on hover */
+    transform: scale(1.02);
 }
 
 label {
-    display: block; /* Stack labels and inputs */
-    margin-bottom: 10px; /* Space below labels */
-    font-weight: bold; /* Bold labels */
-    color: #4a4a4a; /* Darker gray for labels */
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #4a4a4a;
 }
 
 textarea {
-    width: 100%; /* Full width */
-    padding: 12px; /* Padding inside textarea */
-    border: 1px solid #ddd; /* Light gray border */
-    border-radius: 5px; /* Rounded corners */
-    resize: vertical; /* Vertical resizing only */
-    margin-bottom: 20px; /* Space below textarea */
-    transition: border-color 0.3s; /* Transition for border color */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
 }
 
 textarea:focus {
-    border-color: #3498db; /* Blue border on focus */
-    outline: none; /* Remove outline */
+    border-color: #3498db;
+    outline: none;
 }
 
 input[type="submit"] {
-    background-color: #28a745; /* Green button */
-    color: white; /* White text */
-    border: none; /* No border */
-    padding: 12px 20px; /* Padding inside button */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor */
-    font-size: 18px; /* Increased font size */
-    transition: background-color 0.3s, transform 0.2s; /* Transitions for background color and scaling */
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 input[type="submit"]:hover {
-    background-color: #218838; /* Darker green on hover */
-    transform: translateY(-2px); /* Lift effect on hover */
+    background-color: #218838;
+    transform: translateY(-2px);
 }
 
 input[type="submit"]:active {
-    transform: translateY(0); /* Reset lift effect */
+    transform: translateY(0);
 }
 
-/* Responsive styles */
 @media (max-width: 600px) {
     h1 {
-        font-size: 2rem; /* Smaller font size for smaller screens */
+        font-size: 2rem;
     }
     form {
-        padding: 15px; /* Reduce padding on smaller screens */
+        padding: 15px;
     }
     input[type="submit"] {
-        width: 100%; /* Full width for buttons */
+        width: 100%;
     }
 }
-
     </style>
 </head>
 <body>
 
     <h1>Business Contact Extractor</h1>
-    <form action="/upload" method="POST">
+    <form id="contactForm" action="/upload" method="POST">
         <label for="input_text">Enter Text:</label><br>
         <textarea id="input_text" name="input_text" rows="10" cols="50" placeholder="Paste your text here..."></textarea><br><br>
-        <input type="submit" value="Generate Excel">
+        <input type="submit" id="submitButton" value="Generate Excel">
     </form>
+
+    <script>
+        const form = document.getElementById("contactForm");
+        const submitButton = document.getElementById("submitButton");
+        let countdown = 10;
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevents the form from submitting immediately
+            submitButton.disabled = true; // Disables the button during countdown
+            submitButton.value = `Downloading in ${countdown} seconds...`;
+
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                submitButton.value = `Downloading in ${countdown} seconds...`;
+
+                if (countdown === 0) {
+                    clearInterval(countdownInterval);
+                    submitButton.value = "Generate Excel";
+                    submitButton.disabled = false;
+                    form.submit(); // Submits the form after countdown
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
