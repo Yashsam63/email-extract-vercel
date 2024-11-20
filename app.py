@@ -70,5 +70,4 @@ def upload():
 
         # Send the generated file for download
         return send_file(output, download_name="business_contact_data.xlsx", as_attachment=True)
-
-
+    
